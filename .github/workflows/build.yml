@@ -17,6 +17,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgl1-mesa-dev libxkbcommon-dev libegl1-mesa-dev pkg-config
+      - name: Prepare Windows Qt extraction directory
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force (Join-Path $env:RUNNER_WORKSPACE 'Qt/6.11.2/msvc2022_64') | Out-Null
       - uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125
         with:
           version: '6.11.2'
