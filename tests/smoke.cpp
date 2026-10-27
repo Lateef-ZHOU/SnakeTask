@@ -17,15 +17,22 @@ int main(int argc, char **argv)
     QQmlEngine engine;
     bool warned = false;
     QObject::connect(&engine, &QQmlEngine::warnings, &engine, [&](const auto &) { warned = true; });
-    {
+    for (const bool simOnly : {false, true}) {
         QQmlComponent component(&engine);
-        component.setData("import Lidar.SnakeTask\nSnakeTaskModule { gimbals: []; cards: [] }", QUrl());
+        component.setData(simOnly ? "import Lidar.SnakeTask\nSnakeTaskSimOnlyModule { gimbal: null; card: null }" : "import Lidar.SnakeTask\nSnakeTaskModule { gimbals: []; cards: [] }", QUrl());
         std::unique_ptr<QObject> page(component.create());
         if (!page) { qCritical() << component.errors(); return 1; }
         const QQmlListReference charts(page.get(), "mainPages");
         const QQmlListReference sections(page.get(), "sections");
         if (charts.count() < 1 || sections.count() < 1) return 2;
         if (page->property("name").toString().isEmpty()) return 3;
+        if (simOnly) {
+            if (sections.count() != 2) return 7;
+            if (page->metaObject()->indexOfProperty("save") >= 0 ||
+                page->metaObject()->indexOfProperty("saveDir") >= 0 ||
+                page->metaObject()->indexOfProperty("pickedCards") >= 0) return 8;
+        }
+
         QObject *backend = nullptr;
         int backends = 0;
         for (auto *child : page->children()) {

@@ -1,6 +1,6 @@
 # SnakeTask
 
-LiDAR 的独立官邸：具体 C++ 后端、Collector/协议/处理逻辑及其 QML 页面在同一仓库维护。来自 LiDAR_DataACQ master `5cc6d65`，本次分仓不改变运行行为。
+LiDAR 的独立官邸：具体 C++ 后端、Collector/协议/处理逻辑及其 QML 页面在同一仓库维护。来自 LiDAR_DataACQ master `5cc6d65`，分仓后的全功能入口保持原行为。
 
 ## 边界与接入
 
@@ -26,3 +26,11 @@ cmake --build build --config Release --target LidarSnakeTask_qmllint
 ## 许可
 
 MIT，Copyright (c) 2026 周涛（ZHOU TAO）。Qt、libserialport、libpcap/Npcap 等依赖各自授权，MIT 不替代这些许可；详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。本仓库不包含第三方 SDK、运行库或驱动。
+
+## 两套 QML 官邸（2026-10-27）
+
+同一 QML 模块同时提供 `SnakeTaskModule`（全功能）和 `SnakeTaskSimOnlyModule`（数字样机）。每个页面以 Qt attached 机制拥有唯一的同类型 C++ 后端，没有第二套设备/任务实现。全功能主程序继续使用原入口。
+
+simonly 页面接收 GMBDeviceBase gimbal 和 DAQDeviceBase card，保留本仓的唯一计划和独立协程，只提供计划/运行分区。启动固定保存为 true，目录 URL file:. 在启动边界按当前工作目录解释；不保存目录或开关副本，不显示设备选择。累积和停稳可编辑，虚拟云台速度来自设备配置，不额外覆盖任务速度。
+
+[LiDAR_DataACQ-simonly](https://github.com/Lateef-ZHOU/LiDAR_DataACQ-simonly) 通过固定版本装配这些入口，负责 JSON、命令行、设备就绪后启动和系统信号取消。窗口隐藏仍保留历史，不触发实际绘制。测试创建两套真实页面并检查后端唯一性、销毁和精简分区；跨设备的三任务采样与保存由应用集成测试覆盖。
