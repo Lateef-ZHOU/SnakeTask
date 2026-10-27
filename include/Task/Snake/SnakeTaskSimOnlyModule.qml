@@ -11,7 +11,12 @@ SimOnlyTaskModule {
     readonly property string subtitle: internals.task.subtitle
     readonly property bool running: internals.task.running
     settingsParameters: internals.task.settingsParameters
-    planPage: SnakeTaskPlan { task: internals.task }
+    // 创建参数直接写入唯一计划；页面编辑、预览和 start() 读取同一份值。
+    property alias azimuths: plan.azimuths
+    property alias elevation: plan.elevation
+    required azimuths
+    required elevation
+    planPage: SnakeTaskPlan { id: plan; task: internals.task }
     mainPages: [Page {
         title: qsTr("任务预览")
         contentItem: TaskPlanView {
@@ -22,8 +27,8 @@ SimOnlyTaskModule {
         }
     }]
 
-    function start(azimuths, elevation): bool {
-        return internals.task.start(gimbal, [card], azimuths, elevation, accum, settle, true,
+    function start(): bool {
+        return internals.task.start(gimbal, [card], root.azimuths, root.elevation, accum, settle, true,
                                     "file:.", {})
     }
     function stop(): void { internals.task.stop() }

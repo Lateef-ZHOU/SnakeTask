@@ -33,4 +33,8 @@ MIT，Copyright (c) 2026 周涛（ZHOU TAO）。Qt、libserialport、libpcap/Npc
 
 simonly 页面接收 GMBDeviceBase gimbal 和 DAQDeviceBase card，保留本仓的唯一计划和独立协程，只提供计划/运行分区。启动固定保存为 true，目录 URL file:. 在启动边界按当前工作目录解释；不保存目录或开关副本，不显示设备选择。累积和停稳可编辑，虚拟云台速度来自设备配置，不额外覆盖任务速度。
 
+创建 simonly 页面时还必须给出 `azimuths`（世界方位角列表）、`elevation`（世界高度角）、`accum` 和 `settle`（秒）。角度属性直接 alias 到唯一计划页，时间属性由官邸持有；预览、输入框和运行共用这些值，不缓存第二份启动参数。缺少任一项时 QML 拒绝创建；业务有效性仍由已有校验负责。
+
+官邸公开无参 `start(): bool` 和 `stop(): void`。自动启动与开始按钮调用同一个 `start()`，官邸从当前页面读取参数并交给既有 C++ 启动入口形成快照。运行中的编辑仍只影响下次启动；全功能页面、C++ 启动接口和独立协程保持不变。
+
 [LiDAR_DataACQ-simonly](https://github.com/Lateef-ZHOU/LiDAR_DataACQ-simonly) 通过固定版本装配这些入口，负责 JSON、命令行、设备就绪后启动和系统信号取消。窗口隐藏仍保留历史，不触发实际绘制。测试创建两套真实页面并检查后端唯一性、销毁和精简分区；跨设备的三任务采样与保存由应用集成测试覆盖。

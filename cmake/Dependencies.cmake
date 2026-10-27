@@ -9,6 +9,6 @@ set(TASKCORE_WITH_QML ON)
 if(NOT TARGET Lidar::TaskUI)
     FetchContent_Declare(lidar_taskcore
         GIT_REPOSITORY https://github.com/Lateef-ZHOU/TaskCore.git
-        GIT_TAG 04b7279ba5d03396729f28aa9a717ff6785f7041)
+        GIT_TAG a830298848737d33a8b451fb91ea18dce308a8a5)
     FetchContent_MakeAvailable(lidar_taskcore)
 endif()
