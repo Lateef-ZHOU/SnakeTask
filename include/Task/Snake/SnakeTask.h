@@ -1,5 +1,6 @@
 #pragma once
 #include <QtQml/qqmlregistration.h>
+#include <QScopeGuard>
 #include "Task/TaskBase.h"
 #include "Algorithm/Wind/WindProfile.h"
 
@@ -22,6 +23,9 @@ private:
                    double worldElevation, int accumSec, std::chrono::milliseconds hold,
                    std::optional<QDir> saveRoot, GMBMoveParameters movement) override
     {
+        const auto completion = qScopeGuard([this] {
+            QMetaObject::invokeMethod(this, &SnakeTask::refreshRunState, Qt::QueuedConnection);
+        });
         const auto lock = co_await HeldLock{};
         if (!lock)
         {

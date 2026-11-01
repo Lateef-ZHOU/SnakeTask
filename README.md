@@ -38,3 +38,5 @@ simonly 页面接收 GMBDeviceBase gimbal 和 DAQDeviceBase card，保留本仓�
 官邸公开无参 `start(): bool` 和 `stop(): void`。自动启动与开始按钮调用同一个 `start()`，官邸从当前页面读取参数并交给既有 C++ 启动入口形成快照。运行中的编辑仍只影响下次启动；全功能页面、C++ 启动接口和独立协程保持不变。
 
 [LiDAR_DataACQ-simonly](https://github.com/Lateef-ZHOU/LiDAR_DataACQ-simonly) 通过固定版本装配这些入口，负责 JSON、命令行、设备就绪后启动和系统信号取消。窗口隐藏仍保留历史，不触发实际绘制。测试创建两套真实页面并检查后端唯一性、销毁和精简分区；跨设备的三任务采样与保存由应用集成测试覆盖。
+
+2026-11-02：独立协程退出时由自身排队通知 TaskBase 回读完成状态，覆盖设备主动关闭导致的取消；不借用设备通用状态信号推断任务结束，不改编排、锁与消费链。
