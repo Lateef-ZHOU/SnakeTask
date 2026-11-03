@@ -22,8 +22,7 @@ qt_add_qml_module(LidarSnakeTask STATIC URI Lidar.SnakeTask VERSION 1.0
     IMPORT_PATH ${import_paths}
     SOURCES ${headers} QML_FILES ${views})
 add_library(Lidar::SnakeTask ALIAS LidarSnakeTask)
-target_include_directories(LidarSnakeTask PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/Task/Snake")
+target_include_directories(LidarSnakeTask PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(LidarSnakeTask PUBLIC Lidar::TaskUI)
 target_compile_features(LidarSnakeTask PUBLIC cxx_std_20)
 target_compile_definitions(LidarSnakeTask PUBLIC QT_NO_KEYWORDS)

@@ -1,8 +1,8 @@
 #pragma once
 #include <QtQml/qqmlregistration.h>
 #include <QScopeGuard>
-#include "Task/TaskBase.h"
-#include "Algorithm/Wind/WindProfile.h"
+#include "TaskBase.h"
+#include "WindProfile.h"
 
 // 蛇形四轴：页面持世界角输入，协程生成 Collector 并直接表达编排。
 class SnakeTask final : public TaskBase
