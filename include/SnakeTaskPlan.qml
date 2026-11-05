@@ -21,7 +21,7 @@ Section {
     }
 
     title: qsTr("波束计划")
-    component PlanRow: FieldRow { labelWidth: 160 }
+    component PlanRow: FieldRow { wideLabel: true }
     PlanRow {
         label: qsTr("世界高度角（°）")
         RealField {
