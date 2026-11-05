@@ -39,7 +39,7 @@ private:
             auto collector = gmb.collectorFor(gmb.gimbalOf(WorldModel(azimuth, worldElevation)), hold, movement);
             if (!collector)
             {
-                Q_EMIT logMessage("云台目标或运动参数无效，任务未启动");
+                Q_EMIT logMessage("转台目标或运动参数无效，任务未启动");
                 co_return;
             }
             targets.push_back(std::move(collector));
@@ -49,7 +49,7 @@ private:
             const auto moved = co_await moveTo(lock, gmb, targets[0], 0);
             if (moved.empty())
             {
-                Q_EMIT logMessage("云台 失败 / 设备断开 / 任务停止");
+                Q_EMIT logMessage("转台 失败 / 设备断开 / 任务停止");
                 co_return;
             }
             const auto framed = co_await acquireAt(lock, gmb, cards, moved, 0, accumSec, saveRoot, sessionTime, false);
@@ -68,7 +68,7 @@ private:
                 const auto moved = co_await moveTo(lock, gmb, targets[beam], beam);
                 if (moved.empty())
                 {
-                    Q_EMIT logMessage("云台 失败 / 设备断开 / 任务停止");
+                    Q_EMIT logMessage("转台 失败 / 设备断开 / 任务停止");
                     co_return;
                 }
                 const auto framed = co_await acquireAt(lock, gmb, cards, moved, beam, accumSec, saveRoot, sessionTime, beam == last);
@@ -86,7 +86,7 @@ private:
                 const auto moved = co_await moveTo(lock, gmb, targets[beam], beam);
                 if (moved.empty())
                 {
-                    Q_EMIT logMessage("云台 失败 / 设备断开 / 任务停止");
+                    Q_EMIT logMessage("转台 失败 / 设备断开 / 任务停止");
                     co_return;
                 }
                 const auto framed = co_await acquireAt(lock, gmb, cards, moved, beam, accumSec, saveRoot, sessionTime, beam == 0);
