@@ -20,8 +20,8 @@ public:
     [[nodiscard]] int beamCount() const noexcept override { return WindProfile::kBeams; }
 private:
     DeviceCoro run(LockRequest, GMBDeviceBase &gmb, Cards cards, QList<double> worldAzimuths,
-                   double worldElevation, int accumSec, GMBMoveParameters motion,
-                   std::optional<QDir> saveRoot) override
+                   double worldElevation, int accumSec, std::chrono::milliseconds hold,
+                   std::optional<GMBMoveParameters::Speeds> speeds, std::optional<QDir> saveRoot) override
     {
         const auto completion = qScopeGuard([this] {
             QMetaObject::invokeMethod(this, &SnakeTask::refreshRunState, Qt::QueuedConnection);
@@ -36,8 +36,7 @@ private:
         QList<GMBMoveParameters> targets;
         for (const double azimuth : worldAzimuths)
         {
-            motion.target = gmb.gimbalOf(WorldModel(azimuth, worldElevation));
-            auto parameters = gmb.paramsFor(motion);
+            auto parameters = gmb.paramsFor(gmb.gimbalOf(WorldModel(azimuth, worldElevation)), hold, speeds);
             if (!parameters)
             {
                 Q_EMIT logMessage("转台目标或运动参数无效，任务未启动");
