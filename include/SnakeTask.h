@@ -20,8 +20,8 @@ public:
     [[nodiscard]] int beamCount() const noexcept override { return WindProfile::kBeams; }
 private:
     DeviceCoro run(LockRequest, GMBDeviceBase &gmb, Cards cards, QList<double> worldAzimuths,
-                   double worldElevation, int accumSec, std::chrono::milliseconds hold,
-                   std::optional<QDir> saveRoot, GMBMoveParameters movement) override
+                   double worldElevation, int accumSec, GMBMoveParameters motion,
+                   std::optional<QDir> saveRoot) override
     {
         const auto completion = qScopeGuard([this] {
             QMetaObject::invokeMethod(this, &SnakeTask::refreshRunState, Qt::QueuedConnection);
@@ -32,17 +32,18 @@ private:
             Q_EMIT logMessage("设备被占用或未连接，任务未启动");
             co_return;
         }
-        // 全部世界目标先验行程，再发任何任务指令；Collector 同时承载请求和到位结果。
-        QList<std::shared_ptr<const GMBCollector>> targets;
+        // 全部世界目标先经官邸 paramsFor 校验，再发任何任务指令；协程只保存运动参数，到位结果仍是 Collector。
+        QList<GMBMoveParameters> targets;
         for (const double azimuth : worldAzimuths)
         {
-            auto collector = gmb.collectorFor(gmb.gimbalOf(WorldModel(azimuth, worldElevation)), hold, movement);
-            if (!collector)
+            motion.target = gmb.gimbalOf(WorldModel(azimuth, worldElevation));
+            auto parameters = gmb.paramsFor(motion);
+            if (!parameters)
             {
                 Q_EMIT logMessage("转台目标或运动参数无效，任务未启动");
                 co_return;
             }
-            targets.push_back(std::move(collector));
+            targets.push_back(std::move(*parameters));
         }
         QDateTime sessionTime = beginSession();
         {
