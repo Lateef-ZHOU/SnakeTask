@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <QtQml/qqmlregistration.h>
 #include <QScopeGuard>
 #include "TaskBase.h"
@@ -33,7 +34,7 @@ private:
             co_return;
         }
         // 全部世界目标先经官邸 paramsFor 校验，再发任何任务指令；协程只保存运动参数，到位结果仍是 Collector。
-        QList<GMBMoveParameters> targets;
+        std::vector<GMBMoveParameters> targets; // 参数字段只读、不可赋值：用只需移动构造的 vector
         for (const double azimuth : worldAzimuths)
         {
             auto parameters = gmb.paramsFor(gmb.gimbalOf(WorldModel(azimuth, worldElevation)), hold, speeds);
