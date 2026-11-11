@@ -19,7 +19,7 @@ public:
     [[nodiscard]] QString subtitle() const override { return QStringLiteral("往返循环"); }
     [[nodiscard]] int beamCount() const noexcept override { return WindProfile::kBeams; }
 private:
-    DeviceCoro run(LockRequest, GMBDeviceBase &gmb, Cards cards, QList<double> worldAzimuths,
+    DeviceCoro run(LockRequest, GMBFamily &gmb, Cards cards, QList<double> worldAzimuths,
                    double worldElevation, int accumSec, std::chrono::milliseconds hold,
                    std::optional<GMBMoveParameters::Speeds> speeds, std::optional<QDir> saveRoot) override
     {

@@ -33,7 +33,7 @@ MIT，Copyright (c) 2026 周涛（ZHOU TAO）。Qt、libserialport、libpcap/Npc
 
 同一 QML 模块同时提供 `SnakeTaskModule`（全功能）和 `SnakeTaskSimOnlyModule`（数字样机）。每个页面以 Qt attached 机制拥有唯一的同类型 C++ 后端，没有第二套设备/任务实现。全功能主程序继续使用原入口。
 
-simonly 页面接收 GMBDeviceBase gimbal 和 DAQDeviceBase card，保留本仓的唯一计划和独立协程，只提供计划/运行分区。启动固定保存为 true，目录 URL file:. 在启动边界按当前工作目录解释；不保存目录或开关副本，不显示设备选择。累积和停稳可编辑，虚拟云台速度来自设备配置，不额外覆盖任务速度。
+simonly 页面接收 GMBFamily gimbal 和 DAQFamily card，保留本仓的唯一计划和独立协程，只提供计划/运行分区。启动固定保存为 true，目录 URL file:. 在启动边界按当前工作目录解释；不保存目录或开关副本，不显示设备选择。累积和停稳可编辑，虚拟云台速度来自设备配置，不额外覆盖任务速度。
 
 创建 simonly 页面时还必须给出 `azimuths`（世界方位角列表）、`elevation`（世界高度角）、`accum` 和 `settle`（秒）。角度属性直接 alias 到唯一计划页，时间属性由官邸持有；预览、输入框和运行共用这些值，不缓存第二份启动参数。缺少任一项时 QML 拒绝创建；业务有效性仍由已有校验负责。
 
