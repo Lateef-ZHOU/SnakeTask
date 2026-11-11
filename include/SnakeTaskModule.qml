@@ -24,7 +24,7 @@ TaskModule {
 
     function start(azimuths, elevation): bool {
         return internals.task.start(gimbal, pickedCards, azimuths, elevation, accum, settle, save, saveDir,
-                                    {panSpeed: root.panSpeed, tiltSpeed: root.tiltSpeed})
+                                    root.panSpeed, root.tiltSpeed)
     }
     function stop(): void { internals.task.stop() }
     Component.onCompleted: root.registerDevices(internals.task)
