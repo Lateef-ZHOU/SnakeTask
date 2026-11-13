@@ -1,3 +1,7 @@
+## 2026-11-14：接入 FamilyCore（用户定）
+
+依赖声明与开关改用 FamilyCore / FAMILYCORE_WITH_*，协程头由 DeviceCore 提供。当前仅本地整理，GitHub 仍为 TaskCore，旧固定提交暂不更新；联调使用 `FETCHCONTENT_SOURCE_DIR_LIDAR_FAMILYCORE` 指向相邻 FamilyCore，并覆盖配套 DeviceCore/Algorithm 等源码。Windows 主程序或 simonly 的实际消费目标构建通过，业务与数据格式不变；未推送、未更新交付包。
+
 # SnakeTask
 
 2026-11-09 用户定：协程收启动时固定的停稳与速度快照，逐束连同目标位形交官邸 `paramsFor` 预验，全部通过才发令；等待器按束提交运动参数，到位结果仍读 Collector 的实测位形。
@@ -9,7 +13,7 @@ LiDAR 的独立官邸：具体 C++ 后端、Collector/协议/处理逻辑及其 
 - QML 模块：`Lidar.SnakeTask`；页面：`SnakeTaskModule`。
 - CMake 目标：`Lidar::SnakeTask`；静态插件：`LidarSnakeTaskplugin`，最终可执行文件显式 `Q_IMPORT_QML_PLUGIN(LidarSnakeTaskPlugin)`，并导入 TaskUI/UI/Charts 的静态插件。
 - 页面以 attached 对象拥有唯一具体后端，后端不能在 QML 直接创建。设备通过只读 `family` 借出族引用；任务页面只接收族列表，不依赖设备官邸。
-- 依赖由 `cmake/Dependencies.cmake` 固定到提交；可用标准 FetchContent 源码覆盖做联调。多个官邸并用时，先开启所有需要的 HandleCore/TaskCore 可选项，再配置共享库，避免已创建目标后补开模块。
+- 依赖由 `cmake/Dependencies.cmake` 固定到提交；可用标准 FetchContent 源码覆盖做联调。多个官邸并用时，先开启所有需要的 HandleCore/FamilyCore 可选项，再配置共享库，避免已创建目标后补开模块。
 - 不需要串口、抓包驱动。
 
 ## 构建与验证
@@ -52,4 +56,4 @@ simonly 页面接收 GMBFamily gimbal 和 DAQFamily card，保留本仓的唯一
 2026-11-05 表单统一（用户定）：蛇形计划使用 UICore 宽标签预设，业务参数与独立计划保持。 公共视觉规格由 UICore 提供，不增加业务状态。Windows 主程序增量构建、八秒离屏冒烟通过；固定依赖在本地更新，暂不推送。
 
 
-2026-11-05：同步 TaskCore/UICore 公共视觉依赖；本仓库计划页与独立协程不变。本地源码覆盖完成主程序 Windows 增量构建及八秒冒烟，未推送。
+2026-11-05：同步 FamilyCore/UICore 公共视觉依赖；本仓库计划页与独立协程不变。本地源码覆盖完成主程序 Windows 增量构建及八秒冒烟，未推送。
