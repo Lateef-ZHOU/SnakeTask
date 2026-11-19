@@ -22,7 +22,7 @@ public:
 private:
     DeviceCoro run(LockRequest, GMBFamily &gmb, Cards cards, QList<double> worldAzimuths,
                    double worldElevation, int accumSec, std::chrono::milliseconds hold,
-                   std::optional<GMBParameters::Speeds> speeds, std::optional<QDir> saveRoot) override
+                   double panSpeed, double tiltSpeed, std::optional<QDir> saveRoot) override
     {
         const auto completion = qScopeGuard([this] {
             QMetaObject::invokeMethod(this, &SnakeTask::refreshRunState, Qt::QueuedConnection);
@@ -37,7 +37,7 @@ private:
         std::vector<GMBParameters> targets; // 参数字段只读、不可赋值：用只需移动构造的 vector
         for (const double azimuth : worldAzimuths)
         {
-            auto parameters = gmb.paramsFor(gmb.gimbalOf(WorldModel(azimuth, worldElevation)), hold, speeds);
+            auto parameters = gmb.paramsFor(gmb.gimbalOf(WorldModel(azimuth, worldElevation)), hold, panSpeed, tiltSpeed);
             if (!parameters)
             {
                 Q_EMIT logMessage("转台目标或运动参数无效，任务未启动");

@@ -29,7 +29,7 @@ SimOnlyTaskModule {
 
     function start(): bool {
         return internals.task.start(gimbal, [card], root.azimuths, root.elevation, accum, settle, true,
-                                    "file:.", 0, 0) // 虚拟云台定位不带速度，型号忽略
+                                    "file:.", 30.0, 20.0) // 与虚拟云台默认两轴速度一致
     }
     function stop(): void { internals.task.stop() }
     Component.onCompleted: root.registerDevices(internals.task)
