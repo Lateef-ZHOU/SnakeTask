@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <vector>
 #include <QtQml/qqmlregistration.h>
 #include <QScopeGuard>
@@ -22,7 +23,7 @@ public:
 private:
     DeviceCoro run(LockRequest, GMBFamily &gmb, Cards cards, QList<double> worldAzimuths,
                    double worldElevation, int accumSec, std::chrono::milliseconds hold,
-                   double panSpeed, double tiltSpeed, std::optional<QDir> saveRoot) override
+                   double panSpeed, double tiltSpeed, std::optional<std::filesystem::path> saveRoot) override
     {
         const auto completion = qScopeGuard([this] {
             QMetaObject::invokeMethod(this, &SnakeTask::refreshRunState, Qt::QueuedConnection);
